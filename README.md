@@ -4,22 +4,22 @@
 
 ----------------------------------------------------------
 # Overview:
-This lab sets up a complete monitoring stack using Docker containers:
-Prerequisites - Docker installed and running
+- This lab sets up a complete monitoring stack using Docker containers.
+- Prerequisites - Docker installed and running (or have Orbstack running in background).
 ----------------------------------------------------------
 
 ----------------------------------------------------------
-# The Stack:
-Node Exporter:
-    * An "exporter" that collects raw system metrics from your host (e.g. CPU, memory, disk, network)
-    * Exposes these metrics in Prometheus format at the :9100/metrics endpoint
-    * It's not part of Prometheus - it's a separate data collector
-    * Node Exporter metrics: http://localhost:9100/metrics
-Prometheus:
+## The Stack: ##
+- Node Exporter:
+    - An "exporter" that collects raw system metrics from your host (e.g. CPU, memory, disk, network)
+    - Exposes these metrics in Prometheus format at the :9100/metrics endpoint
+    - It's not part of Prometheus - it's a separate data collector
+    - Node Exporter metrics: http://localhost:9100/metrics
+- Prometheus:
     * The actual time-series database that stores metrics, queryable via PromQL
     * Actively "scrapes" (pulls) metrics from exporters every 15 seconds
     * Prometheus UI: http://localhost:9090
-Grafana:
+- Grafana:
     * The visualization layer - it doesn't store any data
     * Queries Prometheus to get the data it needs in order to create visual dashboards
     * Can connect to many data sources (not just Prometheus)
