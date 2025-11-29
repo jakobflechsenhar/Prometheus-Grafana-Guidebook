@@ -34,7 +34,7 @@ docker ps -a
 Docker network ls
 ```
 
-##### Create a new network for your containers to communicate in: #####
+#### Create a new network for your containers to communicate in: ####
 ```bash
 docker network create monitoring-network
 ```
