@@ -1,6 +1,6 @@
-#--------------------------------------------------------#
+# ------------------------------------------------------ #
 # ReadMe: Prometheus + Grafana Guidebook
-#--------------------------------------------------------#
+# ------------------------------------------------------ #
 
 ----------------------------------------------------------
 ## Overview: ##
@@ -34,16 +34,19 @@ docker ps -a
 Docker network ls
 ```
 
+
 Create a new network for your containers to communicate in:
 ```bash
 docker network create monitoring-network
 ```
+
 
 Create two volumes for persistent data storage:
 ```bash
 docker volume create prometheus-volume
 docker volume create grafana-volume
 ```
+
 
 Create and run the node-exporter container:
 ```bash
@@ -55,16 +58,19 @@ docker run -d  \ # create and start a new container
   prom/node-exporter # base image
 ```
 
+
 Check if its running:
 ```bash
 docker ps
 ```
+
 
 Verify that the node-exporter container is actually serving metrics:
 ```bash
 curl http://node-exporter-container:9100/metrics
 curl http://localhost:9100/metrics
 ```
+
 
 Create the prometheus config file:
 ```bash
@@ -78,6 +84,7 @@ scrape_configs:
 EOF
 ```
 
+
 Create and run the prometheus container:
 ```bash
 docker run -d \
@@ -90,8 +97,10 @@ prom/prometheus
 # so this command takes the base image (“prom/prometheus”), modifies it using your own configuration file which is mounted as a volume from your local computer (“$(pwd)” is the source on your Mac, while “/etc/prometheus” is the destination inside the container), and it also creates a persistent storage for metrics data (“prometheus-data” is the source, a Docker-managed volume, while “/prometheus” is the destination inside the container), and then  runs it inside a new container called prometheus-container
 ```
 
+
 Verify:
 Open your browser at http://localhost:9090 and enter the “up” query in Prometheus to verify the Node Exporter is being scraped
+
 
 Create and run the grafana container:
 ```bash
@@ -103,16 +112,19 @@ docker run -d \
   grafana/grafana-oss
   ```
 
+
 Access the Grafana UI:
 - Open your browser and navigate to http://localhost:3000
 - Default Credentials: Username and password are both “admin”
 - Change Password
+
 
 Add Prometheus as a Data Source:
 - In the Grafana UI, click the Connections and select Data Sources
 - Click Add data source and select Prometheus
 - URL: http://prometheus-container:9090 (since Grafana is on the same network as Prometheus, you can reference it by name instead of just localhost)
 - Click Save & Test to ensure Grafana successfully communicates with Prometheus
+
 
 Build some shit:
 - Create Your First Dashboard
@@ -125,6 +137,7 @@ Build some shit:
 - Panel type: Time series (should be default)
 - Title: "CPU Usage by Mode"
 - Click “Run Queries“ to save the panel
+
 
 Cleanup:
 ```bash
