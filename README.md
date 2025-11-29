@@ -28,24 +28,24 @@
 
 ----------------------------------------------------------
 ## The Rundown: ##
-List all remaining resources:
+#### List all remaining resources: ####
 ```bash
 docker ps -a
 Docker network ls
 ```
 
-#### Create a new network for your containers to communicate in: ####
+##### Create a new network for your containers to communicate in: #####
 ```bash
 docker network create monitoring-network
 ```
 
-### Create two volumes for persistent data storage: ###
+#### Create two volumes for persistent data storage: ####
 ```bash
 docker volume create prometheus-volume
 docker volume create grafana-volume
 ```
 
-### Create and run the node-exporter container: ###
+#### Create and run the node-exporter container: ####
 ```bash
 # delete all in-line comments before running this command (leaving no spaces at end of lines)
 docker run -d  \ # create and start a new container
@@ -55,18 +55,18 @@ docker run -d  \ # create and start a new container
   prom/node-exporter # base image
 ```
 
-### Check if its running: ###
+#### Check if its running: ####
 ```bash
 docker ps
 ```
 
-### Verify that the node-exporter container is actually serving metrics: ###
+#### Verify that the node-exporter container is actually serving metrics: ####
 ```bash
 curl http://node-exporter-container:9100/metrics
 curl http://localhost:9100/metrics
 ```
 
-### Create the prometheus config file: ###
+#### Create the prometheus config file: ####
 ```bash
 cat > prometheus.yml << 'EOF'
 global:
@@ -78,7 +78,7 @@ scrape_configs:
 EOF
 ```
 
-### Create and run the prometheus container: ###
+#### Create and run the prometheus container: ####
 ```bash
 docker run -d \
 --name prometheus-container \
@@ -90,10 +90,10 @@ prom/prometheus
 # so this command takes the base image (“prom/prometheus”), modifies it using your own configuration file which is mounted as a volume from your local computer (“$(pwd)” is the source on your Mac, while “/etc/prometheus” is the destination inside the container), and it also creates a persistent storage for metrics data (“prometheus-data” is the source, a Docker-managed volume, while “/prometheus” is the destination inside the container), and then  runs it inside a new container called prometheus-container
 ```
 
-### Verify: ###
+#### Verify: ####
 Open your browser at http://localhost:9090 and enter the “up” query in Prometheus to verify the Node Exporter is being scraped
 
-### Create and run the grafana container: ###
+#### Create and run the grafana container: ####
 ```bash
 docker run -d \
   --name grafana-container \
@@ -103,18 +103,18 @@ docker run -d \
   grafana/grafana-oss
   ```
 
-### Access the Grafana UI: ### 
+#### Access the Grafana UI: #### 
 - Open your browser and navigate to http://localhost:3000
 - Default Credentials: Username and password are both “admin”
 - Change Password
 
-### Add Prometheus as a Data Source: ###
+#### Add Prometheus as a Data Source: ####
 - In the Grafana UI, click the Connections and select Data Sources
 - Click Add data source and select Prometheus
 - URL: http://prometheus-container:9090 (since Grafana is on the same network as Prometheus, you can reference it by name instead of just localhost)
 - Click Save & Test to ensure Grafana successfully communicates with Prometheus
 
-### Build some shit: ### 
+#### Build some shit: #### 
 - Create Your First Dashboard
 - Click the "+" icon in the left sidebar
 - Select "Dashboard"
@@ -126,7 +126,7 @@ docker run -d \
 - Title: "CPU Usage by Mode"
 - Click “Run Queries“ to save the panel
 
-### Cleanup: ###
+#### Cleanup: ####
 ```bash
 docker stop node-exporter prometheus grafana node-exporter-container prometheus-container grafana-container
 docker rm node-exporter prometheus grafana node-exporter-container prometheus-container grafana-container
